@@ -81,9 +81,29 @@
 }
 
 
++ (int) fileCounter
+{
+    @synchronized(self)
+    {
+        static NSString* key = @"kUUFileCounterKey";
+        int count = 1;
+        
+        id obj = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        if (obj && [obj isKindOfClass:[NSNumber class]])
+        {
+            count = ([obj integerValue] + 1);
+        }
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@(count) forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        return count;
+    }
+}
+
 + (void) doBackgroundUploadDownload
 {
-    NSString* fileName = @"testData.dat";
+    NSString* fileName = [NSString stringWithFormat:@"testData-%d.dat", [self fileCounter]];
+    NSLog(@" **** FileName: %@", fileName);
     long fileSize = 1024 * 1000 * 1;
     [self uploadFile:fileName fileSize:fileSize completion:^
      {
