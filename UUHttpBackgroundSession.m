@@ -17,6 +17,7 @@
 
 @property (nonatomic, strong) NSMutableDictionary* completionHandlerDictionary;
 @property (nonatomic, strong) NSMutableDictionary* taskCompletionDictionary;
+@property (nonatomic, strong) NSMutableDictionary* taskRxBufferDictionary;
 
 @end
 
@@ -64,6 +65,7 @@
     {
         self.completionHandlerDictionary = [NSMutableDictionary dictionary];
         self.taskCompletionDictionary = [NSMutableDictionary dictionary];
+        self.taskRxBufferDictionary = [NSMutableDictionary dictionary];
     }
     
     return self;
@@ -74,8 +76,9 @@
     NSMutableURLRequest* req = [[NSMutableURLRequest alloc] initWithURL:remoteUrl];
     [req setHTTPMethod:@"GET"];
     
+    UUDebugLog(@"%@ %@", req.HTTPMethod, remoteUrl);
     UUHttpBackgroundSession* uuSession = [self sharedInstance];
-    NSURLSessionDownloadTask* task = [[uuSession backgroundSession] downloadTaskWithRequest:req];
+    NSURLSessionTask* task = [[uuSession backgroundSession] downloadTaskWithRequest:req];
     [uuSession storeTaskCompletionHandler:completion forTask:task];
     [task resume];
     return task;
@@ -83,7 +86,16 @@
 
 + (NSURLSessionTask*) post:(NSURL*)remoteUrl file:(NSURL*)localFile completion:(UUTaskResponseHandler)completion
 {
-    return nil;
+    NSMutableURLRequest* req = [[NSMutableURLRequest alloc] initWithURL:remoteUrl];
+    [req setHTTPMethod:@"POST"];
+    [req addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    UUDebugLog(@"%@ %@", req.HTTPMethod, remoteUrl);
+    UUHttpBackgroundSession* uuSession = [self sharedInstance];
+    NSURLSessionTask* task = [[uuSession backgroundSession] uploadTaskWithRequest:req fromFile:localFile];
+    [uuSession storeTaskCompletionHandler:completion forTask:task];
+    [task resume];
+    return task;
 }
 
 + (NSURLSessionTask*) put:(NSURL*)remoteUrl file:(NSURL*)localFile completion:(UUTaskResponseHandler)completion
@@ -149,11 +161,51 @@
     if (handler)
     {
         [self.taskCompletionDictionary removeObjectForKey:identifier];
+        [self.taskRxBufferDictionary removeObjectForKey:identifier];
         handler(response, error);
     }
 }
 
+- (NSMutableData*) rxBufferForTask:(NSURLSessionTask*)task
+{
+    NSString* identifier = [NSString stringWithFormat:@"%d", task.taskIdentifier];
+    NSMutableData* buffer = [self.taskRxBufferDictionary objectForKey:identifier];
+    if (!buffer)
+    {
+        buffer = [NSMutableData data];
+        [self.taskRxBufferDictionary setObject:buffer forKey:identifier];
+    }
+    
+    return buffer;
+}
+
 #pragma mark - NSURLSessionDelegate
+
+
+/* The last message a session receives.  A session will only become
+ * invalid because of a systemic error or when it has been
+ * explicitly invalidated, in which case it will receive an
+ * { NSURLErrorDomain, NSURLUserCanceled } error.
+ */
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+{
+    UUDebugLog(@"session: %@, error: %@", session.configuration.identifier, error);
+}
+
+/* If implemented, when a connection level authentication challenge
+ * has occurred, this delegate will be given the opportunity to
+ * provide authentication credentials to the underlying
+ * connection. Some types of authentication will apply to more than
+ * one request on a given connection to a server (SSL Server Trust
+ * challenges).  If this delegate message is not implemented, the
+ * behavior will be to use the default handling, which may involve user
+ * interaction.
+ */
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    UUDebugLog(@"session: %@", session.configuration.identifier);
+}
 
 /* If an application has received an
  * -application:handleEventsForBackgroundURLSession:completionHandler:
@@ -165,7 +217,7 @@
  */
 -(void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession*)session
 {
-    UUDebugLog(@"Background URL session %@ finished events.", session);
+    UUDebugLog(@"Background URL session %@ finished events.", session.configuration.identifier);
     
     if (session.configuration.identifier)
     {
@@ -175,14 +227,121 @@
 
 #pragma mark - NSURLSessionTaskDelegate
 
+/* An HTTP request is attempting to perform a redirection to a different
+ * URL. You must invoke the completion routine to allow the
+ * redirection, allow the redirection with a modified request, or
+ * pass nil to the completionHandler to cause the body of the redirection
+ * response to be delivered as the payload of this request. The default
+ * is to follow redirections.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+willPerformHTTPRedirection:(NSHTTPURLResponse *)response
+        newRequest:(NSURLRequest *)request
+ completionHandler:(void (^)(NSURLRequest *))completionHandler
+{
+    UUDebugLog(@"taskId: %d, response.URL: %@, request.URL: %@", task.taskIdentifier, response.URL, request.URL);
+}
+
+/* The task has received a request specific authentication challenge.
+ * If this delegate is not implemented, the session specific authentication challenge
+ * will *NOT* be called and the behavior will be the same as using the default handling
+ * disposition.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    UUDebugLog(@"taskId: %d", task.taskIdentifier);
+}
+
+/* Sent if a task requires a new, unopened body stream.  This may be
+ * necessary when authentication has failed for any request that
+ * involves a body stream.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+ needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler
+{
+    UUDebugLog(@"taskId: %d", task.taskIdentifier);
+}
+
+/* Sent periodically to notify the delegate of upload progress.  This
+ * information is also available as properties of the task.
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+   didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    UUDebugLog(@"taskId: %d, bytesSent: %lld, totalBytesSent: %lld, totalBytesExpectedToSend: %lld",
+               task.taskIdentifier, bytesSent, totalBytesSent, totalBytesExpectedToSend);
+}
+
 /* Sent as the last message related to a specific task.  Error may be
  * nil, which implies that no error occurred and this task is complete.
  */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    UUDebugLog(@"Session Complete\nSession: %@\nTask URL: %@\nerror: %@", session.configuration.identifier, task.response.URL, error);
+    UUDebugLog(@"Session Complete\nSession: %@\nTask URL: %@\nTask ID: %d\nerror: %@", session.configuration.identifier, task.response.URL, task.taskIdentifier, error);
     [self callCompletionHandlerForSession:session.configuration.identifier];
-    [self callTaskCompletionHandlerForTask:task response:nil error:error];
+    
+    NSMutableData* buffer = [self rxBufferForTask:task];
+    UUDebugLog(@"Rx Buffer Length: %d", buffer.length);
+    
+    id parsedResponse = [self parseResponse:buffer response:task.response];
+    UUDebugLog(@"Parsed Response Class: %@", [parsedResponse class]);
+    
+    [self callTaskCompletionHandlerForTask:task response:parsedResponse error:error];
+}
+
+#pragma mark - NSURLSessionDataDelegate
+
+/* The task has received a response and no further messages will be
+ * received until the completion block is called. The disposition
+ * allows you to cancel a request or to turn a data task into a
+ * download task. This delegate message is optional - if you do not
+ * implement it, you can get the response as a property of the task.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
+{
+    UUDebugLog(@"task: %d, response: %@", dataTask.taskIdentifier, response);
+}
+
+/* Notification that a data task has become a download task.  No
+ * future messages will be sent to the data task.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
+{
+    UUDebugLog(@"dataTask: %d, downloadTask: %d", dataTask.taskIdentifier, downloadTask.taskIdentifier);
+}
+
+/* Sent when data is available for the delegate to consume.  It is
+ * assumed that the delegate will retain and not copy the data.  As
+ * the data may be discontiguous, you should use
+ * [NSData enumerateByteRangesUsingBlock:] to access it.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+    didReceiveData:(NSData *)data
+{
+    UUDebugLog(@"task: %d, dataLength: %d", dataTask.taskIdentifier, data.length);
+    
+    NSMutableData* buffer = [self rxBufferForTask:dataTask];
+    [buffer appendData:data];
+}
+
+/* Invoke the completion routine with a valid NSCachedURLResponse to
+ * allow the resulting data to be cached, or pass nil to prevent
+ * caching. Note that there is no guarantee that caching will be
+ * attempted for a given resource, and you should not rely on this
+ * message to receive the resource data.
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+ willCacheResponse:(NSCachedURLResponse *)proposedResponse
+ completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
+{
+    UUTrace();
 }
 
 #pragma mark - NSURLSessionDownloadDelegate
@@ -195,13 +354,29 @@
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
 didFinishDownloadingToURL:(NSURL *)location
 {
-    UUTrace();
+    UUDebugLog(@"task: %d, location: %@", downloadTask.taskIdentifier, location);
     
-    NSData* data = [[NSData alloc] initWithContentsOfURL:location];
-    UUDebugLog(@"Downloaded %d bytes", data.length);
+    NSURL* destUrl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:[location lastPathComponent]]];
+    UUDebugLog(@"Copying downloaded file to: %@", destUrl);
+    NSError* err = nil;
+    [[NSFileManager defaultManager] moveItemAtURL:location toURL:destUrl error:&err];
+    if (err)
+    {
+        UUDebugLog(@"There was a problem copying downloaded data! Error: %@", err);
+    }
     
-    id parsedResponse = [self parseResponse:data response:downloadTask.response];
-    [self callTaskCompletionHandlerForTask:downloadTask response:parsedResponse error:nil];
+    NSMutableDictionary* md = [NSMutableDictionary dictionary];
+    [md setValue:err forKey:@"error"];
+    [md setValue:destUrl forKey:@"destUrl"];
+    [md setValue:location forKey:@"sourceUrl"];
+    [md setValue:downloadTask forKey:@"task"];
+    
+    //UUDebugLog(@"%@", location);
+    //NSData* data = [[NSData alloc] initWithContentsOfURL:location];
+    //UUDebugLog(@"Downloaded %d bytes", data.length);
+    
+    //id parsedResponse = [self parseResponse:data response:downloadTask.response];
+    [self callTaskCompletionHandlerForTask:downloadTask response:md.copy error:nil];
 }
 
 /* Sent periodically to notify the delegate of download progress. */
@@ -211,6 +386,8 @@ didFinishDownloadingToURL:(NSURL *)location
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     // Default implementation does nothing here
+    UUDebugLog(@"taskId: %d, bytesWritten: %lld, totalBytesWritten: %lld, totalBytesExpectedToWrite: %lld",
+               downloadTask.taskIdentifier, bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
 }
 
 /* Sent when a download has been resumed. If a download failed with an
@@ -222,11 +399,13 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
  didResumeAtOffset:(int64_t)fileOffset
 expectedTotalBytes:(int64_t)expectedTotalBytes
 {
-    // Default implementation does nothing here
+    UUDebugLog(@"task: %d, fileOffset: %lld, expectedTotalBytes: %lld",
+               downloadTask.taskIdentifier, fileOffset, expectedTotalBytes);
 }
 
 #pragma mark - Private Methods
 
+/*
 + (NSString*) uuidString
 {
     NSString* result = nil;
@@ -261,11 +440,10 @@ expectedTotalBytes:(int64_t)expectedTotalBytes
     return path;
 }
 
-
 - (NSString*) toJsonString:(id)object
 {
     NSError* err = nil;
-    NSData* data = [NSJSONSerialization dataWithJSONObject:object options:0 error:&err]; //NSJSONWritingPrettyPrinted
+    NSData* data = [NSJSONSerialization dataWithJSONObject:object options:0 error:&err];
     if (err != nil)
     {
         UUDebugLog(@"Failed to serialize to json, err: %@", err);
@@ -273,7 +451,7 @@ expectedTotalBytes:(int64_t)expectedTotalBytes
     }
     
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-}
+}*/
 
 - (id) parseResponse:(NSData*)rxBuffer response:(NSURLResponse*)response
 {
