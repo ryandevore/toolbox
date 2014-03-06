@@ -80,17 +80,12 @@
     return self;
 }
 
-- (void) log:(NSString*)format, ...
+- (void) log:(NSString*)text
 {
-    va_list args;
-    va_start(args, format);
-    NSString* message = [[NSString alloc] initWithFormat:format arguments:args];
-    va_end(args);
-    
 	int i = 1;
 	
 	sqlite3_bind_double(_insertStatement, i++, [NSDate timeIntervalSinceReferenceDate]);
-	sqlite3_bind_text(_insertStatement, i++, [message UTF8String], -1, SQLITE_TRANSIENT);
+	sqlite3_bind_text(_insertStatement, i++, [text UTF8String], -1, SQLITE_TRANSIENT);
 	
 	int result = sqlite3_step(_insertStatement);
 	if (result == SQLITE_ERROR)

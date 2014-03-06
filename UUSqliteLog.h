@@ -29,7 +29,7 @@
 
 + (instancetype) sharedInstance;
 
-- (void) log:(NSString*)format, ...;
+- (void) log:(NSString*)text;
 
 - (NSString*) pathToAppLog;
 - (NSArray*) readAppLog; // NSArray of NSDictionary, two keys, 'timestamp' (NSNumber) and 'msg' (NSString)
