@@ -233,6 +233,13 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Three Jacks Software";
 				TargetAttributes = {
+					084FF95118C1B02C00BC6611 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					084FF96C18C1B02C00BC6611 = {
 						TestTargetID = 084FF95118C1B02C00BC6611;
 					};

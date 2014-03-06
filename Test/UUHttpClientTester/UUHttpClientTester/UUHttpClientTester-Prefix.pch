@@ -51,3 +51,7 @@
     [[UUSqliteLog sharedInstance] log:[NSString stringWithFormat:@"TRACE - %@:%d (%s)", __UU_FILE__, __LINE__, __PRETTY_FUNCTION__]]; \
     NSLog(@"TRACE %@:%d (%s)", __UU_FILE__, __LINE__, __PRETTY_FUNCTION__);
 
+
+// Define this to be the full path to the PHP test page.
+#define TEST_SERVER_END_POINT @"http://localhost/server.php"
+

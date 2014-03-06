@@ -69,4 +69,75 @@
     [UUHttpBackgroundSession handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
+/// Applications with the "fetch" background mode may be given opportunities to fetch updated content in the background or
+// when it is convenient for the system. This method will be called in these situations. You should call the
+// fetchCompletionHandler as soon as you're finished performing that operation, so the system can accurately estimate its power
+// and data cost.
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
+{   
+    [[self class] doBackgroundUploadDownload];
+    
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+
+
++ (void) doBackgroundUploadDownload
+{
+    NSString* fileName = @"testData.dat";
+    long fileSize = 1024 * 1000 * 1;
+    [self uploadFile:fileName fileSize:fileSize completion:^
+     {
+         [self downloadFile:fileName];
+     }];
+}
+
++ (void) uploadFile:(NSString*)fileName fileSize:(long)fileSize completion:(void (^)())completion
+{
+    NSURL* uploadFile = [self generateRandomFileOfSize:fileSize];
+    
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?fileName=%@", TEST_SERVER_END_POINT, fileName]];
+    
+    [UUHttpBackgroundSession post:url file:uploadFile completion:^(id response, NSError *error)
+     {
+         UUDebugLog(@"Upload complete.\nResponse: %@\nError: %@\n", response, error);
+         completion();
+     }];
+}
+
++ (void) downloadFile:(NSString*)fileName
+{
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?fileName=%@", TEST_SERVER_END_POINT, fileName]];
+    
+    [UUHttpBackgroundSession get:url completion:^(id response, NSError *error)
+     {
+         UUDebugLog(@"Download complete.\nResponse: %@\nError: %@\n", response, error);
+     }];
+}
+
++ (NSURL*) generateRandomFileOfSize:(long)byteSize
+{
+    NSString* dir = NSTemporaryDirectory();
+    NSString* path = [dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%f", [NSDate timeIntervalSinceReferenceDate]]];
+    path = [path stringByAppendingPathExtension:@"tmp"];
+    
+    FILE* f = fopen([path UTF8String], "wb");
+    
+    long written = 0;
+    long chunkSize = 1024;
+    
+    void* buf = malloc(chunkSize);
+    
+    while (written < byteSize)
+    {
+        arc4random_buf(buf, chunkSize);
+        fwrite(buf, 1, chunkSize, f);
+        written += chunkSize;
+    }
+    
+    free(buf);
+    
+    NSLog(@"path: %@", path);
+    return [NSURL fileURLWithPath:path];
+}
+
 @end
