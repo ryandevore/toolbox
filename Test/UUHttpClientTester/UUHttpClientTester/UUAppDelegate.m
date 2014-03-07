@@ -18,6 +18,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.window.rootViewController = [UUHomeViewController new];
@@ -91,7 +93,7 @@
         id obj = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         if (obj && [obj isKindOfClass:[NSNumber class]])
         {
-            count = ([obj integerValue] + 1);
+            count = ([obj intValue] + 1);
         }
         
         [[NSUserDefaults standardUserDefaults] setObject:@(count) forKey:key];
