@@ -142,7 +142,7 @@
 
 - (void) storeTaskCompletionHandler:(UUTaskResponseHandler)handler forTask:(NSURLSessionTask*)task
 {
-    NSString* identifier = [NSString stringWithFormat:@"%d", task.taskIdentifier];
+    NSString* identifier = [NSString stringWithFormat:@"%lu", task.taskIdentifier];
     
     if ([self.taskCompletionDictionary objectForKey:identifier])
     {
@@ -154,7 +154,7 @@
 
 - (void) callTaskCompletionHandlerForTask:(NSURLSessionTask*)task response:(id)response error:(NSError*)error
 {
-    NSString* identifier = [NSString stringWithFormat:@"%d", task.taskIdentifier];
+    NSString* identifier = [NSString stringWithFormat:@"%lu", task.taskIdentifier];
     
     UUTaskResponseHandler handler = [self.taskCompletionDictionary objectForKey:identifier];
     
@@ -168,7 +168,7 @@
 
 - (NSMutableData*) rxBufferForTask:(NSURLSessionTask*)task
 {
-    NSString* identifier = [NSString stringWithFormat:@"%d", task.taskIdentifier];
+    NSString* identifier = [NSString stringWithFormat:@"%lu", task.taskIdentifier];
     NSMutableData* buffer = [self.taskRxBufferDictionary objectForKey:identifier];
     if (!buffer)
     {
@@ -239,7 +239,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
         newRequest:(NSURLRequest *)request
  completionHandler:(void (^)(NSURLRequest *))completionHandler
 {
-    UUDebugLog(@"taskId: %d, response.URL: %@, request.URL: %@", task.taskIdentifier, response.URL, request.URL);
+    UUDebugLog(@"taskId: %lu, response.URL: %@, request.URL: %@", task.taskIdentifier, response.URL, request.URL);
 }
 
 /* The task has received a request specific authentication challenge.
@@ -251,7 +251,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
 didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
-    UUDebugLog(@"taskId: %d", task.taskIdentifier);
+    UUDebugLog(@"taskId: %lu", task.taskIdentifier);
 }
 
 /* Sent if a task requires a new, unopened body stream.  This may be
@@ -261,7 +261,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
  needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler
 {
-    UUDebugLog(@"taskId: %d", task.taskIdentifier);
+    UUDebugLog(@"taskId: %lu", task.taskIdentifier);
 }
 
 /* Sent periodically to notify the delegate of upload progress.  This
@@ -272,7 +272,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     totalBytesSent:(int64_t)totalBytesSent
 totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 {
-    UUDebugLog(@"taskId: %d, bytesSent: %lld, totalBytesSent: %lld, totalBytesExpectedToSend: %lld",
+    UUDebugLog(@"taskId: %lu, bytesSent: %lld, totalBytesSent: %lld, totalBytesExpectedToSend: %lld",
                task.taskIdentifier, bytesSent, totalBytesSent, totalBytesExpectedToSend);
 }
 
@@ -281,11 +281,11 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
  */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    UUDebugLog(@"Session Complete\nSession: %@\nTask URL: %@\nTask ID: %d\nerror: %@", session.configuration.identifier, task.response.URL, task.taskIdentifier, error);
+    UUDebugLog(@"Session Complete\nSession: %@\nTask URL: %@\nTask ID: %lu\nerror: %@", session.configuration.identifier, task.response.URL, task.taskIdentifier, error);
     [self callCompletionHandlerForSession:session.configuration.identifier];
     
     NSMutableData* buffer = [self rxBufferForTask:task];
-    UUDebugLog(@"Rx Buffer Length: %d", buffer.length);
+    UUDebugLog(@"Rx Buffer Length: %lu", buffer.length);
     
     id parsedResponse = [self parseResponse:buffer response:task.response];
     UUDebugLog(@"Parsed Response Class: %@", [parsedResponse class]);
@@ -305,7 +305,7 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
 {
-    UUDebugLog(@"task: %d, response: %@", dataTask.taskIdentifier, response);
+    UUDebugLog(@"task: %lu, response: %@", dataTask.taskIdentifier, response);
 }
 
 /* Notification that a data task has become a download task.  No
@@ -314,7 +314,7 @@ didReceiveResponse:(NSURLResponse *)response
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
 didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
 {
-    UUDebugLog(@"dataTask: %d, downloadTask: %d", dataTask.taskIdentifier, downloadTask.taskIdentifier);
+    UUDebugLog(@"dataTask: %lu, downloadTask: %lu", dataTask.taskIdentifier, downloadTask.taskIdentifier);
 }
 
 /* Sent when data is available for the delegate to consume.  It is
@@ -325,7 +325,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data
 {
-    UUDebugLog(@"task: %d, dataLength: %d", dataTask.taskIdentifier, data.length);
+    UUDebugLog(@"task: %lu, dataLength: %lu", dataTask.taskIdentifier, data.length);
     
     NSMutableData* buffer = [self rxBufferForTask:dataTask];
     [buffer appendData:data];
@@ -354,7 +354,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
 didFinishDownloadingToURL:(NSURL *)location
 {
-    UUDebugLog(@"task: %d, location: %@", downloadTask.taskIdentifier, location);
+    UUDebugLog(@"task: %lu, location: %@", downloadTask.taskIdentifier, location);
     
     NSURL* destUrl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:[location lastPathComponent]]];
     UUDebugLog(@"Copying downloaded file to: %@", destUrl);
@@ -386,7 +386,7 @@ didFinishDownloadingToURL:(NSURL *)location
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     // Default implementation does nothing here
-    UUDebugLog(@"taskId: %d, bytesWritten: %lld, totalBytesWritten: %lld, totalBytesExpectedToWrite: %lld",
+    UUDebugLog(@"taskId: %lu, bytesWritten: %lld, totalBytesWritten: %lld, totalBytesExpectedToWrite: %lld",
                downloadTask.taskIdentifier, bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
 }
 
@@ -399,7 +399,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
  didResumeAtOffset:(int64_t)fileOffset
 expectedTotalBytes:(int64_t)expectedTotalBytes
 {
-    UUDebugLog(@"task: %d, fileOffset: %lld, expectedTotalBytes: %lld",
+    UUDebugLog(@"task: %lu, fileOffset: %lld, expectedTotalBytes: %lld",
                downloadTask.taskIdentifier, fileOffset, expectedTotalBytes);
 }
 
