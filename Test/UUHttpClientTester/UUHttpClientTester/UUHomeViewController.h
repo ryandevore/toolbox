@@ -13,5 +13,6 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)onDoStuffClicked:(id)sender;
+- (IBAction)onExportLogClicked:(id)sender;
 
 @end

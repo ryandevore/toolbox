@@ -99,5 +99,42 @@
     [UUAppDelegate doBackgroundUploadDownload];
 }
 
+- (IBAction)onExportLogClicked:(id)sender
+{
+    NSArray* logEntries = [[UUSqliteLog sharedInstance] readAppLog];
+    
+
+    NSString* path = [NSTemporaryDirectory() stringByAppendingString:@"upload.txt"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:nil])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+    }
+    
+    [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
+    
+    NSFileHandle* fh = [NSFileHandle fileHandleForWritingAtPath:path];
+    
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'";
+    
+    for (NSDictionary* d in logEntries)
+    {
+        NSDate* timestamp = [d valueForKey:@"timestamp"];
+        NSString* msg = [d valueForKey:@"msg"];
+        NSString* line = [NSString stringWithFormat:@"%@\t%@\n", [formatter stringFromDate:timestamp], msg];
+        //NSLog(@"%@", line);
+        NSData* encodedLine = [line dataUsingEncoding:NSUTF8StringEncoding];
+        [fh writeData:encodedLine];
+    }
+    
+    [fh closeFile];
+    
+    NSURL* url = [NSURL fileURLWithPath:path];
+    NSArray *activityItems = @[@"upload.txt", url];
+    
+    UIActivityViewController* vc = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
 
 @end

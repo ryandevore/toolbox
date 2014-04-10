@@ -120,7 +120,7 @@
             const char* msg = (const char*)sqlite3_column_text(sqlStatement, i++);
             
             NSMutableDictionary* md = [NSMutableDictionary dictionary];
-            md[@"timestamp"] = @(timeStamp);
+            md[@"timestamp"] =  [NSDate dateWithTimeIntervalSinceReferenceDate:timeStamp];
             md[@"msg"] = [[NSString alloc] initWithUTF8String:msg];
             [arr addObject:md];
         }
