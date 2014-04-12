@@ -1,0 +1,512 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		084FF95618C1B02C00BC6611 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 084FF95518C1B02C00BC6611 /* Foundation.framework */; };
+		084FF95818C1B02C00BC6611 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 084FF95718C1B02C00BC6611 /* CoreGraphics.framework */; };
+		084FF95A18C1B02C00BC6611 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 084FF95918C1B02C00BC6611 /* UIKit.framework */; };
+		084FF96018C1B02C00BC6611 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 084FF95E18C1B02C00BC6611 /* InfoPlist.strings */; };
+		084FF96218C1B02C00BC6611 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 084FF96118C1B02C00BC6611 /* main.m */; };
+		084FF96618C1B02C00BC6611 /* UUAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 084FF96518C1B02C00BC6611 /* UUAppDelegate.m */; };
+		084FF96818C1B02C00BC6611 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 084FF96718C1B02C00BC6611 /* Images.xcassets */; };
+		084FF96F18C1B02C00BC6611 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 084FF96E18C1B02C00BC6611 /* XCTest.framework */; };
+		084FF97018C1B02C00BC6611 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 084FF95518C1B02C00BC6611 /* Foundation.framework */; };
+		084FF97118C1B02C00BC6611 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 084FF95918C1B02C00BC6611 /* UIKit.framework */; };
+		084FF97918C1B02C00BC6611 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 084FF97718C1B02C00BC6611 /* InfoPlist.strings */; };
+		084FF97B18C1B02C00BC6611 /* UUHttpClientTesterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 084FF97A18C1B02C00BC6611 /* UUHttpClientTesterTests.m */; };
+		084FF98B18C1B12300BC6611 /* UUHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084FF98918C1B12300BC6611 /* UUHomeViewController.m */; };
+		084FF98C18C1B12300BC6611 /* UUHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 084FF98A18C1B12300BC6611 /* UUHomeViewController.xib */; };
+		084FF99718C3CE5000BC6611 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 084FF99618C3CE5000BC6611 /* libsqlite3.dylib */; };
+		08C57B8518C4310700AE651E /* UUHttpBackgroundSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C57B8218C4310700AE651E /* UUHttpBackgroundSession.m */; };
+		08C57B8618C4310700AE651E /* UUSqliteLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C57B8418C4310700AE651E /* UUSqliteLog.m */; };
+		08C57B8918C43A8600AE651E /* server.php in Resources */ = {isa = PBXBuildFile; fileRef = 08C57B8818C43A8600AE651E /* server.php */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		084FF97218C1B02C00BC6611 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 084FF94A18C1B02C00BC6611 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 084FF95118C1B02C00BC6611;
+			remoteInfo = UUHttpClientTester;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		084FF95218C1B02C00BC6611 /* UUHttpClientTester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UUHttpClientTester.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		084FF95518C1B02C00BC6611 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		084FF95718C1B02C00BC6611 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		084FF95918C1B02C00BC6611 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		084FF95D18C1B02C00BC6611 /* UUHttpClientTester-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UUHttpClientTester-Info.plist"; sourceTree = "<group>"; };
+		084FF95F18C1B02C00BC6611 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		084FF96118C1B02C00BC6611 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		084FF96318C1B02C00BC6611 /* UUHttpClientTester-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UUHttpClientTester-Prefix.pch"; sourceTree = "<group>"; };
+		084FF96418C1B02C00BC6611 /* UUAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UUAppDelegate.h; sourceTree = "<group>"; };
+		084FF96518C1B02C00BC6611 /* UUAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UUAppDelegate.m; sourceTree = "<group>"; };
+		084FF96718C1B02C00BC6611 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		084FF96D18C1B02C00BC6611 /* UUHttpClientTesterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UUHttpClientTesterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		084FF96E18C1B02C00BC6611 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		084FF97618C1B02C00BC6611 /* UUHttpClientTesterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UUHttpClientTesterTests-Info.plist"; sourceTree = "<group>"; };
+		084FF97818C1B02C00BC6611 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		084FF97A18C1B02C00BC6611 /* UUHttpClientTesterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UUHttpClientTesterTests.m; sourceTree = "<group>"; };
+		084FF98818C1B12300BC6611 /* UUHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUHomeViewController.h; sourceTree = "<group>"; };
+		084FF98918C1B12300BC6611 /* UUHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUHomeViewController.m; sourceTree = "<group>"; };
+		084FF98A18C1B12300BC6611 /* UUHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UUHomeViewController.xib; sourceTree = "<group>"; };
+		084FF99618C3CE5000BC6611 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		08C57B8118C4310700AE651E /* UUHttpBackgroundSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UUHttpBackgroundSession.h; path = ../../UUHttpBackgroundSession.h; sourceTree = "<group>"; };
+		08C57B8218C4310700AE651E /* UUHttpBackgroundSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UUHttpBackgroundSession.m; path = ../../UUHttpBackgroundSession.m; sourceTree = "<group>"; };
+		08C57B8318C4310700AE651E /* UUSqliteLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UUSqliteLog.h; path = ../../UUSqliteLog.h; sourceTree = "<group>"; };
+		08C57B8418C4310700AE651E /* UUSqliteLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UUSqliteLog.m; path = ../../UUSqliteLog.m; sourceTree = "<group>"; };
+		08C57B8818C43A8600AE651E /* server.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; name = server.php; path = TestServer/server.php; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		084FF94F18C1B02C00BC6611 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				084FF95818C1B02C00BC6611 /* CoreGraphics.framework in Frameworks */,
+				084FF95A18C1B02C00BC6611 /* UIKit.framework in Frameworks */,
+				084FF99718C3CE5000BC6611 /* libsqlite3.dylib in Frameworks */,
+				084FF95618C1B02C00BC6611 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		084FF96A18C1B02C00BC6611 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				084FF96F18C1B02C00BC6611 /* XCTest.framework in Frameworks */,
+				084FF97118C1B02C00BC6611 /* UIKit.framework in Frameworks */,
+				084FF97018C1B02C00BC6611 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		084FF94918C1B02C00BC6611 = {
+			isa = PBXGroup;
+			children = (
+				08C57B8718C43A4000AE651E /* TestServer (PHP) */,
+				084FF98418C1B03400BC6611 /* toolbox */,
+				084FF95B18C1B02C00BC6611 /* UUHttpClientTester */,
+				084FF97418C1B02C00BC6611 /* UUHttpClientTesterTests */,
+				084FF95418C1B02C00BC6611 /* Frameworks */,
+				084FF95318C1B02C00BC6611 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		084FF95318C1B02C00BC6611 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				084FF95218C1B02C00BC6611 /* UUHttpClientTester.app */,
+				084FF96D18C1B02C00BC6611 /* UUHttpClientTesterTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		084FF95418C1B02C00BC6611 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				084FF99618C3CE5000BC6611 /* libsqlite3.dylib */,
+				084FF95518C1B02C00BC6611 /* Foundation.framework */,
+				084FF95718C1B02C00BC6611 /* CoreGraphics.framework */,
+				084FF95918C1B02C00BC6611 /* UIKit.framework */,
+				084FF96E18C1B02C00BC6611 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		084FF95B18C1B02C00BC6611 /* UUHttpClientTester */ = {
+			isa = PBXGroup;
+			children = (
+				084FF96418C1B02C00BC6611 /* UUAppDelegate.h */,
+				084FF96518C1B02C00BC6611 /* UUAppDelegate.m */,
+				084FF98818C1B12300BC6611 /* UUHomeViewController.h */,
+				084FF98918C1B12300BC6611 /* UUHomeViewController.m */,
+				084FF98A18C1B12300BC6611 /* UUHomeViewController.xib */,
+				084FF96718C1B02C00BC6611 /* Images.xcassets */,
+				084FF95C18C1B02C00BC6611 /* Supporting Files */,
+			);
+			path = UUHttpClientTester;
+			sourceTree = "<group>";
+		};
+		084FF95C18C1B02C00BC6611 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				084FF95D18C1B02C00BC6611 /* UUHttpClientTester-Info.plist */,
+				084FF95E18C1B02C00BC6611 /* InfoPlist.strings */,
+				084FF96118C1B02C00BC6611 /* main.m */,
+				084FF96318C1B02C00BC6611 /* UUHttpClientTester-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		084FF97418C1B02C00BC6611 /* UUHttpClientTesterTests */ = {
+			isa = PBXGroup;
+			children = (
+				084FF97A18C1B02C00BC6611 /* UUHttpClientTesterTests.m */,
+				084FF97518C1B02C00BC6611 /* Supporting Files */,
+			);
+			path = UUHttpClientTesterTests;
+			sourceTree = "<group>";
+		};
+		084FF97518C1B02C00BC6611 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				084FF97618C1B02C00BC6611 /* UUHttpClientTesterTests-Info.plist */,
+				084FF97718C1B02C00BC6611 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		084FF98418C1B03400BC6611 /* toolbox */ = {
+			isa = PBXGroup;
+			children = (
+				08C57B8118C4310700AE651E /* UUHttpBackgroundSession.h */,
+				08C57B8218C4310700AE651E /* UUHttpBackgroundSession.m */,
+				08C57B8318C4310700AE651E /* UUSqliteLog.h */,
+				08C57B8418C4310700AE651E /* UUSqliteLog.m */,
+			);
+			name = toolbox;
+			sourceTree = "<group>";
+		};
+		08C57B8718C43A4000AE651E /* TestServer (PHP) */ = {
+			isa = PBXGroup;
+			children = (
+				08C57B8818C43A8600AE651E /* server.php */,
+			);
+			name = "TestServer (PHP)";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		084FF95118C1B02C00BC6611 /* UUHttpClientTester */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 084FF97E18C1B02C00BC6611 /* Build configuration list for PBXNativeTarget "UUHttpClientTester" */;
+			buildPhases = (
+				084FF94E18C1B02C00BC6611 /* Sources */,
+				084FF94F18C1B02C00BC6611 /* Frameworks */,
+				084FF95018C1B02C00BC6611 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UUHttpClientTester;
+			productName = UUHttpClientTester;
+			productReference = 084FF95218C1B02C00BC6611 /* UUHttpClientTester.app */;
+			productType = "com.apple.product-type.application";
+		};
+		084FF96C18C1B02C00BC6611 /* UUHttpClientTesterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 084FF98118C1B02C00BC6611 /* Build configuration list for PBXNativeTarget "UUHttpClientTesterTests" */;
+			buildPhases = (
+				084FF96918C1B02C00BC6611 /* Sources */,
+				084FF96A18C1B02C00BC6611 /* Frameworks */,
+				084FF96B18C1B02C00BC6611 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				084FF97318C1B02C00BC6611 /* PBXTargetDependency */,
+			);
+			name = UUHttpClientTesterTests;
+			productName = UUHttpClientTesterTests;
+			productReference = 084FF96D18C1B02C00BC6611 /* UUHttpClientTesterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		084FF94A18C1B02C00BC6611 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = UU;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Three Jacks Software";
+				TargetAttributes = {
+					084FF95118C1B02C00BC6611 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+					084FF96C18C1B02C00BC6611 = {
+						TestTargetID = 084FF95118C1B02C00BC6611;
+					};
+				};
+			};
+			buildConfigurationList = 084FF94D18C1B02C00BC6611 /* Build configuration list for PBXProject "UUHttpClientTester" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 084FF94918C1B02C00BC6611;
+			productRefGroup = 084FF95318C1B02C00BC6611 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				084FF95118C1B02C00BC6611 /* UUHttpClientTester */,
+				084FF96C18C1B02C00BC6611 /* UUHttpClientTesterTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		084FF95018C1B02C00BC6611 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				084FF96018C1B02C00BC6611 /* InfoPlist.strings in Resources */,
+				084FF98C18C1B12300BC6611 /* UUHomeViewController.xib in Resources */,
+				084FF96818C1B02C00BC6611 /* Images.xcassets in Resources */,
+				08C57B8918C43A8600AE651E /* server.php in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		084FF96B18C1B02C00BC6611 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				084FF97918C1B02C00BC6611 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		084FF94E18C1B02C00BC6611 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				084FF96618C1B02C00BC6611 /* UUAppDelegate.m in Sources */,
+				08C57B8618C4310700AE651E /* UUSqliteLog.m in Sources */,
+				084FF96218C1B02C00BC6611 /* main.m in Sources */,
+				08C57B8518C4310700AE651E /* UUHttpBackgroundSession.m in Sources */,
+				084FF98B18C1B12300BC6611 /* UUHomeViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		084FF96918C1B02C00BC6611 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				084FF97B18C1B02C00BC6611 /* UUHttpClientTesterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		084FF97318C1B02C00BC6611 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 084FF95118C1B02C00BC6611 /* UUHttpClientTester */;
+			targetProxy = 084FF97218C1B02C00BC6611 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		084FF95E18C1B02C00BC6611 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				084FF95F18C1B02C00BC6611 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		084FF97718C1B02C00BC6611 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				084FF97818C1B02C00BC6611 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		084FF97C18C1B02C00BC6611 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		084FF97D18C1B02C00BC6611 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		084FF97F18C1B02C00BC6611 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UUHttpClientTester/UUHttpClientTester-Prefix.pch";
+				INFOPLIST_FILE = "UUHttpClientTester/UUHttpClientTester-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		084FF98018C1B02C00BC6611 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UUHttpClientTester/UUHttpClientTester-Prefix.pch";
+				INFOPLIST_FILE = "UUHttpClientTester/UUHttpClientTester-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		084FF98218C1B02C00BC6611 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/UUHttpClientTester.app/UUHttpClientTester";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UUHttpClientTester/UUHttpClientTester-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "UUHttpClientTesterTests/UUHttpClientTesterTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		084FF98318C1B02C00BC6611 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/UUHttpClientTester.app/UUHttpClientTester";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UUHttpClientTester/UUHttpClientTester-Prefix.pch";
+				INFOPLIST_FILE = "UUHttpClientTesterTests/UUHttpClientTesterTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		084FF94D18C1B02C00BC6611 /* Build configuration list for PBXProject "UUHttpClientTester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				084FF97C18C1B02C00BC6611 /* Debug */,
+				084FF97D18C1B02C00BC6611 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		084FF97E18C1B02C00BC6611 /* Build configuration list for PBXNativeTarget "UUHttpClientTester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				084FF97F18C1B02C00BC6611 /* Debug */,
+				084FF98018C1B02C00BC6611 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		084FF98118C1B02C00BC6611 /* Build configuration list for PBXNativeTarget "UUHttpClientTesterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				084FF98218C1B02C00BC6611 /* Debug */,
+				084FF98318C1B02C00BC6611 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 084FF94A18C1B02C00BC6611 /* Project object */;
+}
