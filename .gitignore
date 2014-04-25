@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 Sample/UUInstagramatic.xcodeproj/xcuserdata/
 Sample/UUInstagramatic.xcodeproj/project.xcworkspace/
 xcuserdata
 project.xcworkspace
+=======
+xcuserdata
+*.xccheckout
+>>>>>>> e6a8ffcb28c6507ca27680761f8b88b2c3c0643d
