@@ -1469,6 +1469,33 @@ dispatch_queue_t UUCoreBluetoothQueue()
 
 
 
+@interface UUCentralManagerRestoringDelegate : UUCentralManagerDelegate
+
+@end
+
+@interface UUCentralManagerRestoringDelegate ()
+
+@property (nullable, nonatomic, copy) UUWillRestoreStateBlock willRestoreStateBlock;
+
+@end
+
+@implementation UUCentralManagerRestoringDelegate
+
+- (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary<NSString *, id> *)dict
+{
+    UUCoreBluetoothLog(@"Restoring state, dict: %@", dict);
+    UUWillRestoreStateBlock block = self.willRestoreStateBlock;
+    if (block)
+    {
+        block(dict);
+    }
+}
+
+@end
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark - CBCentralManager (UUCoreBluetooth)
@@ -1496,6 +1523,7 @@ dispatch_queue_t UUCoreBluetoothQueue()
 - (void) uuScanForPeripheralsWithServices:(nullable NSArray<CBUUID *> *)serviceUUIDs
                                   options:(nullable NSDictionary<NSString *, id> *)options
                   peripheralFoundCallback:(nonnull UUPeripheralFoundBlock)peripheralFoundBlock
+                 willRestoreStateCallback:(nonnull UUWillRestoreStateBlock)willRestoreStateBlock
 {
     UUCoreBluetoothLog(@"Starting BTLE scan, serviceUUIDs: %@, options: %@, state: %@", serviceUUIDs, options, UUCBManagerStateToString(self.state));
     
@@ -1507,6 +1535,13 @@ dispatch_queue_t UUCoreBluetoothQueue()
     
     UUCentralManagerDelegate* delegate = [self uuCentralManagerDelegate];
     delegate.peripheralFoundBlock = peripheralFoundBlock;
+    
+    if ([delegate isKindOfClass:[UUCentralManagerRestoringDelegate class]])
+    {
+        UUCentralManagerRestoringDelegate* restoringDelegate = (UUCentralManagerRestoringDelegate*)delegate;
+        restoringDelegate.willRestoreStateBlock = willRestoreStateBlock;
+    }
+    
     [self scanForPeripheralsWithServices:serviceUUIDs options:options];
 }
 
@@ -1657,6 +1692,8 @@ dispatch_queue_t UUCoreBluetoothQueue()
 
 @property (nullable, nonatomic, strong) NSMutableDictionary< NSString*, UUPeripheralBlock >* rssiPollingBlocks;
 
+@property (nullable, nonatomic, strong) UUWillRestoreStateBlock willRestoreStateBlock;
+
 @end
 
 @implementation UUCoreBluetooth
@@ -1668,9 +1705,13 @@ dispatch_queue_t UUCoreBluetoothQueue()
     
     dispatch_once (&onceToken, ^
     {
-        NSMutableDictionary* opts = [NSMutableDictionary dictionary];
-        [opts setValue:@(NO) forKey:CBCentralManagerOptionShowPowerAlertKey];
-        //[opts setValue:@"UUCoreBluetooth" forKey:CBCentralManagerOptionRestoreIdentifierKey];
+        NSDictionary* opts = theSharedInstanceInitOptions;
+        if (!opts)
+        {
+            NSMutableDictionary* md = [NSMutableDictionary dictionary];
+            [md setValue:@(NO) forKey:CBCentralManagerOptionShowPowerAlertKey];
+            opts = md;
+        }
         
         UUCoreBluetooth* obj = [[UUCoreBluetooth alloc] initWithCentralOptions:opts];
         theSharedObject = obj;
@@ -1679,13 +1720,29 @@ dispatch_queue_t UUCoreBluetoothQueue()
     return theSharedObject;
 }
 
+static NSDictionary<NSString*, id>* theSharedInstanceInitOptions = nil;
+
++ (void) setSharedInstanceInitOptions:(nullable NSDictionary<NSString*, id>*)options
+{
+    theSharedInstanceInitOptions = options;
+}
+
 - (id) initWithCentralOptions:(nullable NSDictionary<NSString*, id>*)options
 {
     self = [super init];
     
     if (self)
     {
-        self.delegate = [[UUCentralManagerDelegate alloc] init];
+        UUDebugLog(@"Initializing UUCoreBluetooth with options: %@", options);
+        
+        if (options && [options valueForKey:CBCentralManagerOptionRestoreIdentifierKey])
+        {
+            self.delegate = [[UUCentralManagerRestoringDelegate alloc] init];
+        }
+        else
+        {
+            self.delegate = [[UUCentralManagerDelegate alloc] init];
+        }
         
         dispatch_queue_t centralDispatchQueue = UUCoreBluetoothQueue();
         
@@ -1719,6 +1776,7 @@ dispatch_queue_t UUCoreBluetoothQueue()
 {
     for (UUPeripheral* p in self.peripherals.allValues)
     {
+        #pragma unused(p)
         UUCoreBluetoothLog(@"Peripheral %@-%@, state is %@ (%@) when central state changed to %@ (%@)",
                            p.identifier, p.name, UUCBPeripheralStateToString(p.peripheralState), @(p.peripheralState),
                            UUCBManagerStateToString(state), @(state));
@@ -1776,6 +1834,7 @@ dispatch_queue_t UUCoreBluetoothQueue()
               peripheralClass:(nullable Class)peripheralClass
                       filters:(nullable NSArray< NSObject<UUPeripheralFilter>* >*)filters
       peripheralFoundCallback:(nonnull UUPeripheralBlock)peripheralFoundBlock
+     willRestoreStateCallback:(nonnull UUWillRestoreStateBlock)willRestoreStateBlock
 {
     NSMutableDictionary* opts = [NSMutableDictionary dictionary];
     [opts setValue:@(allowDuplicates) forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
@@ -1805,9 +1864,12 @@ dispatch_queue_t UUCoreBluetoothQueue()
         }
     };
     
+    self.willRestoreStateBlock = willRestoreStateBlock;
+    
     [self.centralManager uuScanForPeripheralsWithServices:serviceUUIDs
                                                   options:opts
-                                  peripheralFoundCallback:self.peripheralFoundBlock];
+                                  peripheralFoundCallback:self.peripheralFoundBlock
+                                 willRestoreStateCallback:self.willRestoreStateBlock];
 }
 
 - (void) resumeScanning
@@ -1816,7 +1878,8 @@ dispatch_queue_t UUCoreBluetoothQueue()
     
     [self.centralManager uuScanForPeripheralsWithServices:self.scanUuidList
                                                   options:self.scanOptions
-                                  peripheralFoundCallback:self.peripheralFoundBlock];
+                                  peripheralFoundCallback:self.peripheralFoundBlock
+                                 willRestoreStateCallback:self.willRestoreStateBlock];
 }
 
 - (BOOL) shouldDiscoverPeripheral:(nonnull UUPeripheral*)peripheral
@@ -1989,6 +2052,7 @@ dispatch_queue_t UUCoreBluetoothQueue()
     UUPeripheral* uuPeripheral = [self findPeripheralFromCbPeripheral:peripheral];
     
     NSNumber* oldRssi = uuPeripheral.rssi;
+    #pragma unused(oldRssi)
     
     [uuPeripheral updateRssi:rssi];
     

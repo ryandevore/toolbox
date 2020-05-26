@@ -18,6 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef void (^UUCentralStateChangedBlock)(CBManagerState state);
+typedef void (^UUWillRestoreStateBlock)(NSDictionary<NSString *, id> * _Nullable dict);
 typedef void (^UUPeripheralFoundBlock)(CBPeripheral* _Nonnull peripheral, NSDictionary<NSString*, id>* _Nullable advertisementData, NSNumber* _Nonnull rssi);
 typedef void (^UUPeripheralConnectedBlock)(CBPeripheral* _Nonnull peripheral);
 typedef void (^UUPeripheralDisconnectedBlock)(CBPeripheral* _Nonnull peripheral, NSError* _Nullable error);
@@ -178,7 +179,8 @@ extern  NSTimeInterval const kUUCoreBluetoothTimeoutDisabled;
 // Block based wrapper around CBCentralManager scanForPeripheralsWithServices:options
 - (void) uuScanForPeripheralsWithServices:(nullable NSArray<CBUUID *> *)serviceUUIDs
                                   options:(nullable NSDictionary<NSString *, id> *)options
-                  peripheralFoundCallback:(nonnull UUPeripheralFoundBlock)peripheralFoundBlock;
+                  peripheralFoundCallback:(nonnull UUPeripheralFoundBlock)peripheralFoundBlock
+                 willRestoreStateCallback:(nonnull UUWillRestoreStateBlock)willRestoreStateBlock;;
 
 // Convenience wrapper around CBCentralManager stopScan
 - (void) uuStopScanning;
@@ -328,6 +330,13 @@ extern  NSTimeInterval const kUUCoreBluetoothTimeoutDisabled;
 // Singleton instance
 + (nonnull instancetype) sharedInstance;
 
+// Sets a static dictionary that is passed into the CBCentralManager init method
+//
+// NOTE: Once sharedInstance  has been called, the set method has no effect.
+//
+// Use these to prepare UUCoreBluetooth for state restoration/preservation
++ (void) setSharedInstanceInitOptions:(nullable NSDictionary<NSString*, id>*)options;
+
 // Reference to the underlying central
 @property (nonnull, nonatomic, strong, readonly) CBCentralManager* centralManager;
 
@@ -359,7 +368,8 @@ extern  NSTimeInterval const kUUCoreBluetoothTimeoutDisabled;
               allowDuplicates:(BOOL)allowDuplicates
               peripheralClass:(nullable Class)peripheralClass
                       filters:(nullable NSArray< NSObject<UUPeripheralFilter>* >*)filters
-      peripheralFoundCallback:(nonnull UUPeripheralBlock)peripheralFoundBlock;
+      peripheralFoundCallback:(nonnull UUPeripheralBlock)peripheralFoundBlock
+     willRestoreStateCallback:(nonnull UUWillRestoreStateBlock)willRestoreStateBlock;
 
 // Stop an ongoing scan
 - (void) stopScanning;
